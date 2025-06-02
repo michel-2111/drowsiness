@@ -8,7 +8,7 @@ import pygame
 import time
 
 app = Flask(__name__)
-
+app.run(host="0.0.0.0", port=5000)
 # ========================
 # Variabel global dan Lock
 # ========================
