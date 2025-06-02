@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Arsitektur Sistem DrowsyEye</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              main: "#0B0C10",
+              container: "#1F2833",
+              paragraph: "#C5C6C7",
+              accent: "#66FCF1",
+              hover: "#45A29E",
+            },
+            fontFamily: {
+              sans: ["Poppins", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gradient-to-br from-blue-100 to-blue-200 text-paragraph font-sans min-h-screen flex flex-col">
+    <!-- NAVBAR -->
+    <nav
+      class="fixed top-0 w-full bg-container shadow-md px-4 sm:px-6 py-4 z-50"
+    >
+      <div class="flex items-center justify-between">
+        <!-- KIRI -->
+        <div>
+          <a
+            class="text-base sm:text-xl text-accent px-4 py-1.5 rounded-md font-medium hover:bg-hover hover:text-container transition"
+          >
+            <button onclick="goBack()">Kembali</button>
+          </a>
+        </div>
+        <!-- TENGAH -->
+        <div class="text-2xl sm:text-3xl font-semibold text-accent text-center absolute left-1/2 transform -translate-x-1/2">
+          DrowsyEye
+        </div>
+        <!-- KANAN -->
+        <div class="flex items-center">
+          <div class="hidden sm:flex sm:space-x-6">
+            <a
+              href="{{ url_for('detect_page') }}"
+              class="px-4 py-1 text-base sm:text-xl text-accent hover:bg-hover hover:text-container transition"
+              >Live Feed</a
+            >
+            <a
+              href="{{ url_for('profile') }}"
+              class="px-4 py-1 text-base sm:text-xl text-accent hover:bg-hover hover:text-container transition"
+              >About</a
+            >
+          </div>
+          <!-- Hamburger Menu Button -->
+          <button
+            id="menu-toggle"
+            class="sm:hidden text-accent focus:outline-none"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16m-7 6h7"
+              ></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <!-- Mobile Menu -->
+      <div id="mobile-menu" class="hidden sm:hidden bg-container">
+        <div class="flex flex-col items-center space-y-2 py-4">
+          <a
+            href="{{ url_for('detect_page') }}"
+            class="px-4 py-2 text-base text-accent hover:bg-hover hover:text-container w-full text-center"
+            >Live Feed</a
+          >
+          <a
+            href="{{ url_for('profile') }}"
+            class="px-4 py-2 text-base text-accent hover:bg-hover hover:text-container w-full text-center"
+            >About</a
+          >
+        </div>
+      </div>
+    </nav>
+
+    <!-- Konten -->
+    <main class="flex-grow pt-20 sm:pt-[100px] px-4 sm:px-6 max-w-6xl mx-auto mb-12 sm:mb-16">
+      <h1 class="text-2xl sm:text-4xl font-semibold text-container text-center mb-6">
+        Arsitektur Sistem DrowsyEye
+      </h1>
+
+      <!-- Gambar -->
+      <div class="flex justify-center mb-8 sm:mb-10">
+        <img
+          src="/static/arsitektur.png"
+          alt="Arsitektur Sistem"
+          class="rounded-lg shadow-xl w-full max-w-md sm:max-w-full"
+        />
+      </div>
+
+      <!-- Penjelasan -->
+      <div
+        class="bg-container p-4 sm:p-6 rounded-2xl shadow-lg space-y-4 text-base sm:text-lg leading-relaxed"
+      >
+        <p>
+          Sistem
+          <span class="text-accent font-semibold">DrowsyEye</span> bekerja
+          dengan memanfaatkan webcam untuk menangkap wajah pengguna. Video dari
+          webcam akan diproses menggunakan
+          <span class="text-accent">OpenCV</span> dan
+          <span class="text-accent">DLib</span> untuk mendeteksi koordinat mata.
+        </p>
+        <p>
+          Kemudian,
+          <span class="text-accent">Eye Aspect Ratio (EAR)</span> digunakan
+          untuk menentukan apakah pengguna mengalami microsleep. Jika ya, model
+          <span class="text-accent">SVM</span> dari
+          <span class="text-accent">Scikit-learn</span> memutuskan kondisi
+          microsleep berdasarkan koordinat mata yang dihitung menggunakan
+          <span class="text-accent">NumPy</span>.
+        </p>
+        <p>
+          Setelah microsleep terdeteksi,
+          <span class="text-accent">Python</span> mengirim sinyal ke
+          <span class="text-accent">ESP32</span> melalui
+          <span class="text-accent">MQTT Broker</span>. ESP32 akan menyalakan
+          <span class="text-accent">buzzer</span> dan
+          <span class="text-accent">LED</span> sebagai bentuk peringatan.
+        </p>
+        <p>
+          Selain itu, data dikirimkan ke backend
+          <span class="text-accent">FastAPI</span> untuk ditampilkan pada
+          aplikasi web. Sistem juga dapat memberikan
+          <span class="text-accent">notifikasi web</span> agar pengguna atau
+          orang lain tahu bahwa terjadi microsleep.
+        </p>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer
+      id="footer"
+      class="bg-container text-center py-4 text-base sm:text-lg font-bold text-accent shadow-inner"
+    >
+      © 2025 Microsleep Recognition Kelompok 3 - 6TI6
+    </footer>
+    <script src="/js/music.js"></script>
+    <script>
+      function goBack() {
+        window.history.back();
+      }
+
+      const menuToggle = document.getElementById("menu-toggle");
+      const mobileMenu = document.getElementById("mobile-menu");
+
+      menuToggle.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
+      });
+    </script>
+  </body>
+</html>

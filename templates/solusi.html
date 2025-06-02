@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Solusi Pencegahan Microsleep</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tambahkan ini di dalam <head> untuk ambil ikon lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        lucide.createIcons(); // ini penting agar lucide render awal
+      });
+    </script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              main: "#0B0C10",
+              container: "#1F2833",
+              paragraph: "#C5C6C7",
+              accent: "#66FCF1",
+              hover: "#45A29E",
+            },
+            fontFamily: {
+              sans: ["Poppins", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body
+    class="bg-gradient-to-br from-blue-100 to-blue-200 text-paragraph font-sans min-h-screen flex flex-col"
+  >
+    <!-- Navbar -->
+    <nav
+      class="fixed top-0 w-full bg-container shadow-md px-4 sm:px-6 py-4 z-50"
+    >
+      <div class="flex items-center justify-between">
+        <!-- KIRI -->
+        <div>
+          <button
+            class="text-base sm:text-xl text-accent px-4 py-1.5 rounded-md font-medium hover:bg-hover hover:text-container transition"
+            onclick="goBack()"
+          >
+            Kembali
+          </button>
+        </div>
+        <!-- TENGAH -->
+        <div
+          class="text-2xl sm:text-3xl font-semibold text-accent text-center absolute left-1/2 transform -translate-x-1/2"
+        >
+          DrowsyEye
+        </div>
+        <!-- KANAN -->
+        <div class="flex items-center">
+          <div class="hidden sm:flex sm:space-x-6">
+            <a
+              href="{{ url_for('detect_page') }}"
+              class="px-4 py-1 text-base sm:text-xl text-accent hover:bg-hover hover:text-container transition"
+              >Live Camera</a
+            >
+            <a
+              href="{{ url_for('profile') }}"
+              class="px-4 py-1 text-base sm:text-xl text-accent hover:bg-hover hover:text-container transition"
+              >About</a
+            >
+          </div>
+          <!-- Hamburger Menu Button -->
+          <button
+            id="menu-toggle"
+            class="sm:hidden text-accent focus:outline-none"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16m-7 6h7"
+              ></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <!-- Mobile Menu -->
+      <div id="mobile-menu" class="hidden sm:hidden bg-container">
+        <div class="flex flex-col items-center space-y-2 py-4">
+          <a
+            href="{{ url_for('detect_page') }}"
+            class="px-4 py-2 text-base text-accent hover:bg-hover hover:text-container w-full text-center"
+            >Live Camera</a
+          >
+          <a
+            href="{{ url_for('profile') }}"
+            class="px-4 py-2 text-base text-accent hover:bg-hover hover:text-container w-full text-center"
+            >About</a
+          >
+        </div>
+      </div>
+    </nav>
+
+    <!-- Konten -->
+    <main class="flex-grow pt-20 sm:pt-[100px] px-4 sm:px-6 max-w-5xl mx-auto">
+      <!-- Judul + tombol play -->
+      <div class="flex flex-col sm:flex-row justify-between items-center mb-6 sm:mb-8 px-0 sm:px-4">
+        <h1 class="text-2xl sm:text-4xl font-semibold text-container text-center sm:text-left mb-4 sm:mb-0">
+          Tips Menghindari Microsleep
+        </h1>
+        <button
+          id="playButton"
+          class="bg-accent text-main p-2 sm:p-3 rounded-full shadow-lg hover:bg-hover transition"
+          aria-label="Play Song"
+        >
+          <i data-lucide="play" class="w-5 sm:w-6 h-5 sm:h-6"></i>
+        </button>
+      </div>
+
+      <!-- Audio disembunyikan -->
+      <audio id="motivasiAudio" hidden>
+        <source src="{{ url_for('static', filename='Face Down.mp3') }}" type="audio/mpeg" />
+        Browser Anda tidak mendukung pemutar audio.
+      </audio>
+
+      <!-- Konten Solusi -->
+      <section
+        id="solusi"
+        class="bg-container rounded-2xl shadow-lg p-4 sm:p-6 space-y-4 sm:space-y-6 text-base sm:text-lg leading-relaxed"
+      >
+        <p>
+          Microsleep adalah kondisi di mana seseorang tertidur sangat singkat
+          tanpa menyadarinya. Hal ini sangat berbahaya, terutama saat mengemudi
+          atau bekerja. Berikut beberapa
+          <span class="text-accent font-semibold"
+            >tips pencegahan microsleep</span
+          >:
+        </p>
+
+        <ul class="list-disc pl-6 space-y-2 sm:space-y-3">
+          <li>
+            <span class="text-accent font-semibold">Tidur cukup:</span> Pastikan
+            Anda tidur minimal 7–8 jam setiap malam.
+          </li>
+          <li>
+            <span class="text-accent font-semibold"
+              >Istirahat secara teratur:</span
+            >
+            Saat berkendara jarak jauh, beristirahatlah setiap 2 jam.
+          </li>
+          <li>
+            <span class="text-accent font-semibold"
+              >Hindari perjalanan saat jam biologis lemah:</span
+            >
+            Seperti antara pukul 02.00–06.00 dan 13.00–15.00.
+          </li>
+          <li>
+            <span class="text-accent font-semibold"
+              >Konsumsi kafein dengan bijak:</span
+            >
+            Minuman berkafein seperti kopi bisa membantu, tapi jangan bergantung
+            penuh padanya.
+          </li>
+          <li>
+            <span class="text-accent font-semibold"
+              >Gunakan sistem deteksi seperti DrowsyEye:</span
+            >
+            Untuk membantu memantau tingkat kantuk dan memberi peringatan dini.
+          </li>
+          <li>
+            <span class="text-accent font-semibold">Jaga sirkulasi udara:</span>
+            Ruangan atau kendaraan yang sejuk dan memiliki sirkulasi udara baik
+            bisa membantu Anda tetap terjaga.
+          </li>
+        </ul>
+
+        <p>
+          Dengan mengikuti tips di atas, Anda bisa menurunkan risiko terkena
+          microsleep dan tetap aman dalam beraktivitas.
+        </p>
+      </section>
+
+      <!-- Spacer -->
+      <div class="h-12 sm:h-16"></div>
+    </main>
+
+    <!-- Footer -->
+    <footer
+      id="footer"
+      class="bg-container text-center py-4 text-base sm:text-lg font-bold text-accent shadow-inner"
+    >
+      © 2025 Microsleep Recognition Kelompok 3 - 6TI6
+    </footer>
+    <script src="{{ url_for('static', filename='js/music.js') }}"></script>
+    <script>
+      function goBack() {
+        window.history.back();
+      }
+
+      const menuToggle = document.getElementById("menu-toggle");
+      const mobileMenu = document.getElementById("mobile-menu");
+
+      menuToggle.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
+      });
+
+      const playButton = document.getElementById("playButton");
+      const audio = document.getElementById("motivasiAudio");
+      let isPlaying = false;
+      let isProcessing = false; // Flag to prevent overlapping calls
+
+      playButton.addEventListener("click", async () => {
+        if (isProcessing) return; // Prevent overlapping actions
+        isProcessing = true;
+
+        try {
+          if (isPlaying) {
+            audio.pause();
+            audio.currentTime = 0; // Optional: reset to start
+            playButton.innerHTML = '<i data-lucide="play" class="w-5 sm:w-6 h-5 sm:h-6"></i>';
+            isPlaying = false;
+          } else {
+            await audio.play(); // Wait for play to complete
+            playButton.innerHTML = '<i data-lucide="pause" class="w-5 sm:w-6 h-5 sm:h-6"></i>';
+            isPlaying = true;
+          }
+          lucide.createIcons(); // Re-render Lucide icons
+        } catch (error) {
+          console.error("Audio error:", error);
+          alert("Failed to play/pause audio. Please try again.");
+        } finally {
+          isProcessing = false; // Reset flag after action completes
+        }
+      });
+
+      // Ensure audio stops when it ends to reset the button
+      audio.addEventListener("ended", () => {
+        isPlaying = false;
+        playButton.innerHTML = '<i data-lucide="play" class="w-5 sm:w-6 h-5 sm:h-6"></i>';
+        lucide.createIcons();
+        isProcessing = false;
+      });
+    </script>
+  </body>
+</html>

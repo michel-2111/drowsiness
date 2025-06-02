@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Drowsiness Detection</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              main: "#0B0C10", // background utama
+              container: "#1F2833", // background konten
+              paragraph: "#C5C6C7", // teks biasa
+              accent: "#66FCF1", // teks penting, judul, link utama
+              hover: "#45A29E", // warna hover link
+            },
+            fontFamily: {
+              sans: ["Poppins", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body
+    class="font-sans bg-gradient-to-br from-blue-100 to-blue-200 text-gray-800 min-h-screen flex flex-col"
+  >
+    <!-- NAVBAR -->
+    <nav
+      class="fixed top-0 w-full bg-container shadow-md px-4 sm:px-6 py-4 z-50"
+    >
+      <div class="flex items-center justify-between">
+        <!-- KIRI -->
+        <div>
+          <a
+            class="text-base sm:text-xl text-accent px-4 py-1.5 rounded-md font-medium hover:bg-hover hover:text-container transition"
+          >
+            <button onclick="goBack()">Kembali</button>
+          </a>
+        </div>
+        <!-- TENGAH -->
+        <div class="text-2xl sm:text-3xl font-semibold text-accent text-center absolute left-1/2 transform -translate-x-1/2">
+          DrowsyEye
+        </div>
+        <!-- KANAN -->
+        <div class="flex items-center">
+          <div class="hidden sm:flex sm:space-x-6">
+            <a
+              href="{{ url_for('solusi') }}"
+              class="px-4 py-1 text-base sm:text-xl text-accent hover:bg-hover hover:text-container transition"
+              >Tips</a
+            >
+            <a
+              href="{{ url_for('arsitektur') }}"
+              class="px-4 py-1 text-base sm:text-xl text-accent hover:bg-hover hover:text-container transition"
+              >Architecture</a
+            >
+          </div>
+          <!-- Hamburger Menu Button -->
+          <button
+            id="menu-toggle"
+            class="sm:hidden text-accent focus:outline-none"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                cold
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16m-7 6h7"
+              ></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <!-- Mobile Menu -->
+      <div id="mobile-menu" class="hidden sm:hidden bg-container">
+        <div class="flex flex-col items-center space-y-2 py-4">
+          <a
+            href="{{ url_for('solusi') }}"
+            class="px-4 py-2 text-base text-accent hover:bg-hover hover:text-container w-full text-center"
+            >Tips</a
+          >
+          <a
+            href="{{ url_for('arsitektur') }}"
+            class="px-4 py-2 text-base text-accent hover:bg-hover hover:text-container w-full text-center"
+            >Architecture</a
+          >
+        </div>
+      </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 mt-20 sm:mt-28 px-4 flex flex-col items-center text-center">
+      <h1
+        class="text-xl sm:text-4xl font-bold mb-6 sm:mb-8 text-container drop-shadow"
+      >
+        Real-Time Microsleep Detection
+      </h1>
+
+      <img
+        id="video-feed"
+        src="{{ url_for('video') }}"
+        class="w-full max-w-md sm:max-w-3xl rounded-2xl shadow-xl mb-6 sm:mb-8 transition hover:scale-105"
+        alt="Live Video Feed"
+      />
+
+      <div class="flex flex-wrap justify-center gap-4 sm:gap-6 mb-8 sm:mb-12">
+        <button
+          id="start"
+          class="bg-green-500 text-white font-semibold px-4 sm:px-6 py-2 sm:py-3 rounded-xl shadow-md hover:shadow-lg hover:-translate-y-1 transition text-base sm:text-lg"
+        >
+          START
+        </button>
+        <button
+          id="stop"
+          class="bg-red-500 text-white font-semibold px-4 sm:px-6 py-2 sm:py-3 rounded-xl shadow-md hover:shadow-lg hover:-translate-y-1 transition text-base sm:text-lg"
+        >
+          STOP
+        </button>
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer
+      id="footer"
+      class="mt-auto bg-container text-center py-4 text-base sm:text-lg font-bold text-accent shadow-inner"
+    >
+      © 2025 Microsleep Recognition Kelompok 3 - 6TI6
+    </footer>
+
+    <!-- SCRIPT -->
+    <script>
+      // Back button functionality
+      function goBack() {
+        window.history.back();
+      }
+
+      document.getElementById("start").onclick = function () {
+        fetch("/start").then(() => {
+          alert("Detection Started!");
+        });
+      };
+
+      document.getElementById("stop").onclick = function () {
+        fetch("/stop").then(() => {
+          alert("Detection Stopped!");
+        });
+      };
+
+      const menuToggle = document.getElementById("menu-toggle");
+      const mobileMenu = document.getElementById("mobile-menu");
+
+      menuToggle.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
+      });
+    </script>
+    <script src="{{ url_for('static', filename='js/music.js') }}"></script>
+  </body>
+</html>
